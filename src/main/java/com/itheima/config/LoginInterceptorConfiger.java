@@ -28,6 +28,8 @@ public class LoginInterceptorConfiger implements WebMvcConfigurer {
         patterns.add("/loginT");
         patterns.add("/regJson");
         patterns.add("/loginServelt");//Thymeleaf模板要排除登录操作（即控制器中的@Requestmapping方法）
+        patterns.add("/api/evaluation/**");
+        patterns.add("/api/recommend/**");
         //给出白名单外的文件添加拦截，如果登录拦截失效就注释下面这行代码
         registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns(patterns);
     }

@@ -1,6 +1,8 @@
 package com.itheima.controller;
 
+import com.itheima.dao.ProjectMemberContributionMapper;
 import com.itheima.domain.EvaluationScore;
+import com.itheima.domain.ProjectMemberContribution;
 import com.itheima.service.EvaluationService;
 import com.itheima.util.ResponseResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class EvaluationController {
 
     @Autowired
     private EvaluationService evaluationService;
+
+    @Autowired
+    private ProjectMemberContributionMapper projectMemberContributionMapper;
 
     @PostMapping("/submit")
     public ResponseResult<Void> submitScore(@RequestBody EvaluationScore score) {
@@ -57,6 +62,26 @@ public class EvaluationController {
             errorData.put("data", new HashMap<Integer, Double>());
             errorData.put("message", "查询个人评分失败：" + e.getMessage());
             result.setData(errorData);
+        }
+        return result;
+    }
+
+    @PostMapping("/test/addContribution")
+    public ResponseResult<Void> addContribution(@RequestParam Integer projectId,
+                                                 @RequestParam Integer userId,
+                                                 @RequestParam Double contributionRate) {
+        ResponseResult<Void> result = new ResponseResult<>();
+        try {
+            ProjectMemberContribution contribution = new ProjectMemberContribution();
+            contribution.setProjectId(projectId);
+            contribution.setUserId(userId);
+            contribution.setContributionRate(contributionRate);
+            projectMemberContributionMapper.insert(contribution);
+            result.setState(200);
+            result.setMessage("贡献数据添加成功！");
+        } catch (Exception e) {
+            result.setState(500);
+            result.setMessage("添加失败：" + e.getMessage());
         }
         return result;
     }
