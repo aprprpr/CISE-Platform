@@ -13,6 +13,7 @@ public interface AdminDao extends BaseMapper<Admin> {
     //保存员工信息
     void save(Project project);
     Integer setAdju(Judge judge);
+    Integer countAdju(Judge judge);
 
     Boolean setSelectedProjectPass(Integer studentID);
     List<Apply> passAllApply(String passStatus);

@@ -7,6 +7,9 @@
         insert into judge (student_id,project_id,adju_id)
         VALUES(#{studentId},#{projectId},#{adjuId})
     </update>
+    <select id="countAdju" resultType="java.lang.Integer">
+        select count(*) from judge where student_id=#{studentId} and project_id=#{projectId} and adju_id=#{adjuId}
+    </select>
     <update id="setSelectedProjectPass">
         update apply set pass_status ='通过' where student_id=#{studentId}
     </update>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="common/common_head::commonHeader"></head>
+
+<body>
+<div class="page">
+  <div th:include="common/common_mainnavbar :: commonMainNavbar"></div>
+
+  <div class="page-content d-flex align-items-stretch">
+    <div th:include="common/common_navigation :: commonNavigation"></div>
+
+    <div class="content-inner">
+      <header class="page-header">
+        <div class="container-fluid">
+          <h2 class="no-margin-bottom">智能项目推荐</h2>
+        </div>
+      </header>
+
+      <div class="breadcrumb-holder container-fluid">
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item"><a th:href="@{/index}">首页</a></li>
+          <li class="breadcrumb-item active">智能项目推荐</li>
+        </ul>
+      </div>
+
+      <section class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header">
+                <h3><i class="fa fa-magic"></i> 选择推荐方式</h3>
+              </div>
+              <div class="card-body">
+                <ul class="nav nav-tabs" id="recommendTabs" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="personal-tab" data-toggle="tab" href="#personal" role="tab">
+                      <i class="fa fa-user"></i> 个性化推荐
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="keyword-tab" data-toggle="tab" href="#keyword" role="tab">
+                      <i class="fa fa-search"></i> 关键词搜索
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="similar-tab" data-toggle="tab" href="#similar" role="tab">
+                      <i class="fa fa-copy"></i> 相似项目
+                    </a>
+                  </li>
+                </ul>
+
+                <div class="tab-content mt-4" id="recommendTabContent">
+                  <div class="tab-pane fade show active" id="personal" role="tabpanel">
+                    <div class="card">
+                      <div class="card-header">
+                        <h4><i class="fa fa-star"></i> 个性化项目推荐</h4>
+                      </div>
+                      <div class="card-body">
+                        <p class="text-muted">基于您的兴趣和历史行为，智能推荐最适合您的创新创业项目</p>
+                        <div class="form-group">
+                          <label for="personalTopN">推荐项目数量：</label>
+                          <select class="form-control" id="personalTopN" style="width: 200px;">
+                            <option value="5">5 个项目</option>
+                            <option value="10" selected>10 个项目</option>
+                            <option value="15">15 个项目</option>
+                            <option value="20">20 个项目</option>
+                          </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="getPersonalRecommend()">
+                          <i class="fa fa-magic"></i> 开始推荐
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="keyword" role="tabpanel">
+                    <div class="card">
+                      <div class="card-header">
+                        <h4><i class="fa fa-search"></i> 关键词搜索推荐</h4>
+                      </div>
+                      <div class="card-body">
+                        <p class="text-muted">输入您感兴趣的关键词，智能推荐相关项目</p>
+                        <div class="form-group">
+                          <label for="keywords">搜索关键词：</label>
+                          <input type="text" class="form-control" id="keywords" placeholder="例如：人工智能、机器人、Web开发" style="width: 400px;">
+                        </div>
+                        <div class="form-group">
+                          <label for="keywordTopN">推荐项目数量：</label>
+                          <select class="form-control" id="keywordTopN" style="width: 200px;">
+                            <option value="5">5 个项目</option>
+                            <option value="10" selected>10 个项目</option>
+                            <option value="15">15 个项目</option>
+                          </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="searchByKeyword()">
+                          <i class="fa fa-search"></i> 搜索推荐
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="tab-pane fade" id="similar" role="tabpanel">
+                    <div class="card">
+                      <div class="card-header">
+                        <h4><i class="fa fa-copy"></i> 相似项目推荐</h4>
+                      </div>
+                      <div class="card-body">
+                        <p class="text-muted">选择一个参考项目，系统将为您推荐相似的项目</p>
+                        <div class="form-group">
+                          <label for="similarProjectSelect">选择参考项目：</label>
+                          <select class="form-control" id="similarProjectSelect" style="width: 400px;">
+                            <option value="">-- 请选择项目 --</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="similarTopN">推荐项目数量：</label>
+                          <select class="form-control" id="similarTopN" style="width: 200px;">
+                            <option value="3">3 个项目</option>
+                            <option value="5" selected>5 个项目</option>
+                            <option value="10">10 个项目</option>
+                          </select>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="getSimilarProjects()">
+                          <i class="fa fa-copy"></i> 查找相似项目
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4" id="resultSection" style="display:none;">
+          <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <h3><i class="fa fa-list"></i> 推荐结果</h3>
+                <span class="badge badge-primary" id="resultCount"></span>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                      <tr>
+                        <th>序号</th>
+                        <th>项目ID</th>
+                        <th>项目名称</th>
+                        <th>项目描述</th>
+                        <th>指导教师ID</th>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody id="resultTableBody">
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4" id="loadingSection" style="display:none;">
+          <div class="col-lg-12 text-center">
+            <div class="spinner-border text-primary" role="status">
+              <span class="sr-only">加载中...</span>
+            </div>
+            <p class="mt-2 text-muted">正在调用智能推荐引擎，请稍候...</p>
+          </div>
+        </div>
+
+        <div class="row mt-4" id="emptySection" style="display:none;">
+          <div class="col-lg-12">
+            <div class="alert alert-info text-center">
+              <i class="fa fa-info-circle"></i> 暂无推荐结果，请尝试其他方式或调整搜索条件
+            </div>
+          </div>
+        </div>
+
+        <div class="row mt-4" id="errorSection" style="display:none;">
+          <div class="col-lg-12">
+            <div class="alert alert-danger text-center">
+              <i class="fa fa-exclamation-circle"></i> <span id="errorMessage"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div th:include="common/common_footer :: commonFooter"></div>
+    </div>
+  </div>
+</div>
+
+<div th:include="common/common_onload_js :: onLoadJs"></div>
+
+<script th:inline="javascript">
+const studentId = [[${studentId}]];
+
+$(document).ready(function() {
+  loadProjectsForSimilar();
+});
+
+function loadProjectsForSimilar() {
+  $.ajax({
+    url: '/api/project/list',
+    method: 'GET',
+    success: function(res) {
+      if (res.data && res.data.length > 0) {
+        res.data.forEach(function(project) {
+          $('#similarProjectSelect').append('<option value="' + project.projectId + '">' + project.projectName + '</option>');
+        });
+      }
+    }
+  });
+}
+
+function getPersonalRecommend() {
+  const topN = $('#personalTopN').val();
+  showLoading();
+  
+  $.ajax({
+    url: '/api/recommend/projects/' + studentId,
+    method: 'GET',
+    data: { topN: topN },
+    success: function(res) {
+      hideLoading();
+      if (res.state === 200 && res.data && res.data.length > 0) {
+        showResults(res.data);
+      } else {
+        showEmpty();
+      }
+    },
+    error: function(xhr, status, error) {
+      hideLoading();
+      showError('个性化推荐失败：' + error);
+    }
+  });
+}
+
+function searchByKeyword() {
+  const keywords = $('#keywords').val().trim();
+  const topN = $('#keywordTopN').val();
+  
+  if (!keywords) {
+    alert('请输入搜索关键词');
+    return;
+  }
+  
+  showLoading();
+  
+  $.ajax({
+    url: '/api/recommend/search',
+    method: 'GET',
+    data: { keywords: keywords, topN: topN },
+    success: function(res) {
+      hideLoading();
+      if (res.state === 200 && res.data && res.data.length > 0) {
+        showResults(res.data);
+      } else {
+        showEmpty();
+      }
+    },
+    error: function(xhr, status, error) {
+      hideLoading();
+      showError('关键词搜索失败：' + error);
+    }
+  });
+}
+
+function getSimilarProjects() {
+  const projectId = $('#similarProjectSelect').val();
+  const topN = $('#similarTopN').val();
+  
+  if (!projectId) {
+    alert('请选择参考项目');
+    return;
+  }
+  
+  showLoading();
+  
+  $.ajax({
+    url: '/api/recommend/similar/' + projectId,
+    method: 'GET',
+    data: { topN: topN },
+    success: function(res) {
+      hideLoading();
+      if (res.state === 200 && res.data && res.data.length > 0) {
+        showResults(res.data);
+      } else {
+        showEmpty();
+      }
+    },
+    error: function(xhr, status, error) {
+      hideLoading();
+      showError('相似项目查询失败：' + error);
+    }
+  });
+}
+
+function showResults(data) {
+  $('#resultSection').show();
+  $('#emptySection').hide();
+  $('#errorSection').hide();
+  $('#resultCount').text(data.length + ' 个项目');
+  
+  $('#resultTableBody').empty();
+  for (let i = 0; i < data.length; i++) {
+    const project = data[i];
+    const row = '<tr>' +
+      '<td>' + (i + 1) + '</td>' +
+      '<td>' + project.projectId + '</td>' +
+      '<td><strong>' + project.projectName + '</strong></td>' +
+      '<td>' + (project.projectInfo || '暂无描述') + '</td>' +
+      '<td>' + project.teacherId + '</td>' +
+      '<td><a href="/apply2?projectId=' + project.projectId + '" class="btn btn-sm btn-primary">申报项目</a></td>' +
+      '</tr>';
+    $('#resultTableBody').append(row);
+  }
+}
+
+function showLoading() {
+  $('#loadingSection').show();
+  $('#resultSection').hide();
+  $('#emptySection').hide();
+  $('#errorSection').hide();
+}
+
+function hideLoading() {
+  $('#loadingSection').hide();
+}
+
+function showEmpty() {
+  $('#resultSection').hide();
+  $('#emptySection').show();
+  $('#errorSection').hide();
+}
+
+function showError(message) {
+  $('#resultSection').hide();
+  $('#emptySection').hide();
+  $('#errorSection').show();
+  $('#errorMessage').text(message);
+}
+</script>
+</body>
+</html>

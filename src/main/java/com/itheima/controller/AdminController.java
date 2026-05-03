@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -165,19 +166,27 @@ public class AdminController extends BaseController{
         return "allot/index";
     }
     @RequestMapping("AddAdjuServlet2")
-    public String AddAdjuServlet2(Integer studentId,Integer projectId,Integer adjuId,Model model){
+    public String AddAdjuServlet2(Integer studentId,Integer projectId,Integer adjuId,RedirectAttributes redirectAttributes){
         Judge judge = new Judge();
         judge.setStudentId(studentId);
         judge.setProjectId(projectId);
         judge.setAdjuId(adjuId);
-         Integer result=adminDao.setAdju(judge);
-        System.out.println("fen配结果"+result);
+        
+        //检查是否已存在该分配记录
+        Integer count = adminDao.countAdju(judge);
+        if (count != null && count > 0) {
+            redirectAttributes.addFlashAttribute("msg", "该评审员已分配给该学生的该项目，请勿重复分配");
+            return "redirect:/AddAdjuServlet1";
+        }
+        
+        Integer result=adminDao.setAdju(judge);
+        System.out.println("分配结果"+result);
          if (result==1){
-             model.addAttribute("msg", "分配成功,请继续分配或选择其他操作");
+             redirectAttributes.addFlashAttribute("msg", "分配成功,请继续分配或选择其他操作");
              return "redirect:/AddAdjuServlet1";
          }else{
              //分配失败
-             model.addAttribute("msg", "分配失败,请重试");
+             redirectAttributes.addFlashAttribute("msg", "分配失败,请重试");
              return "redirect:/AddAdjuServlet1";
          }
     }

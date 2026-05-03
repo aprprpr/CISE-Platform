@@ -55,6 +55,8 @@
                     <li><a th:href="@{/projectAdd}">添加项目</a></li>
                 </ul>
             </li>
+
+            <li><a th:href="@{/teacher/score}"> <i class="fa fa-star"></i>评分管理</a></li>
             </div>
 <!--            老师功能结束-->
 <!--            评审员功能开始-->
@@ -78,12 +80,18 @@
                         <li><a th:href="@{/querymyapply}">查看已申报项目</a></li>
                     </ul>
                 </li>
+                <li><a href="#recommend" aria-expanded="false" data-toggle="collapse"> <i class="fa fa-magic"></i>智能推荐</a>
+                    <ul id="recommend" class="collapse list-unstyled ">
+                        <li><a th:href="@{/recommend/index}">项目推荐</a></li>
+                    </ul>
+                </li>
             <li><a href="#user" aria-expanded="false" data-toggle="collapse"> <i class="icon-user"></i>个人管理</a>
                 <ul id="user" class="collapse list-unstyled ">
                     <li><a th:href="@{/queryStuInfo}">查看个人信息</a></li>
                     <li><a th:href="@{/cpassword}">修改密码</a></li>
                 </ul>
             </li>
+            <li><a th:href="@{/evaluation/score}"> <i class="fa fa-star"></i>评分管理</a></li>
             </div>
 <!--            学生功能结束-->
 <!--            管理员功能开始-->
@@ -105,6 +113,7 @@
                 </li>
                 <li><a th:href="@{/selectAllpass}"><i class="fa fa-database"></i>查看已通过项目</a></li>
                 <li><a th:href="@{/cpassword}"><i class="fa fa-newspaper-o"></i>修改密码</a></li>
+                <li><a th:href="@{/evaluation/score}"><i class="fa fa-star"></i>评分管理</a></li>
             <li><a th:href="@{/login}"> <i class="icon-interface-windows"></i>Login page </a></li>
 <!--                管理员功能结束-->
             </div>

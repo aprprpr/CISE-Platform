@@ -77,4 +77,5 @@ com\itheima\service\impl\TeacherServiceImpl.class
 com\itheima\config\LoginInterceptorConfiger.class
 com\itheima\service\impl\StudentServiceImpl.class
 com\itheima\TestTest$MyClass.class
+com\itheima\controller\EvaluationPageController.class
 com\itheima\dao\AdminDao.class
